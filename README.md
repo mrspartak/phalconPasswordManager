@@ -6,7 +6,7 @@ You should use it only for your needs.
 
 Installation
 -------------------------
-You need to install PhalconPHP extension http://phalconphp.com/en/
+You need to install PhalconPHP extension http://phalconphp.com/en/, PHP APC extension.
 
 Copy this git project. Insert database structure from db folder. Edit **config_default.ini** file and rename it to **config.ini**
 
