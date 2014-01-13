@@ -37,7 +37,7 @@ $di->set('view', function() use ($config) {
 			$compiler = $volt->getCompiler();
 			
 			$compiler->addFunction('recaptcha_get_html', function() use ($config) {
-				return "'". recaptcha_get_html($config->captcha->stat, null, true). "'" ;
+				return "'". recaptcha_get_html($config->captcha->pub, null, true). "'" ;
 			});
 			
 			return $volt;
