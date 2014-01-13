@@ -31,3 +31,4 @@ Application settings
 - hash_rounds: times to hash each secret. **Change only one time!**
 - session_lifetime:: 0 for short session or >0 for static lifetime
 - debug: show Exceptions by 1
+- cache_apc: 1 - cache to APC (needed extension), else FILES, give permissions to write for /tmp/cache/ directory

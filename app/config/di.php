@@ -64,12 +64,19 @@ $di->setShared('db', function() use ($config) {
 
 
 $di->setShared('modelsMetadata', function() use ($config) {
-	return new Phalcon\Mvc\Model\MetaData\Apc(
-		array(
-			"lifetime" => 3600,
-			"suffix"   => $config->app->suffix . "-meta-db-main"
-		)
-	);
+	if($config->app->cache_apc) {
+		$metaData = new Phalcon\Mvc\Model\MetaData\Apc(
+			array(
+				"lifetime" => 3600,
+				"suffix"   => $config->app->suffix . "-meta-db-main"
+			)
+		);
+	} else {
+		$metaData = new \Phalcon\Mvc\Model\Metadata\Files(array(
+			'metaDataDir' => ROOTDIR . '/tmp/cache/'
+		));
+	}
+	return $metaData;
 });
 
 

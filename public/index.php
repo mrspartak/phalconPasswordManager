@@ -49,8 +49,8 @@ catch(Exception $e) {
 		$app->response->redirect("error")->sendHeaders();
 	} else {
 		echo get_class($e), ": ", $e->getMessage(), "<br>";
-    echo " File=", $e->getFile(), "<br>";
-    echo " Line=", $e->getLine(), "<br>";
-    echo $e->getTraceAsString();
+		echo " File=", $e->getFile(), "<br>";
+		echo " Line=", $e->getLine(), "<br>";
+		echo $e->getTraceAsString();
 	}
 }
