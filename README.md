@@ -3,6 +3,7 @@ Password Manager
 
 If u won't to lose your passwords or any secret data, that App is for you.
 You should use it only for your needs.
+Example - https://pwd.assorium.ru/
 
 Installation
 -------------------------

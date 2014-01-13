@@ -12,8 +12,12 @@
 </head>
 <body>
 	<div class="contain">
-  	{% include "errors/messages.phtml" %}
+  		{% include "errors/messages.phtml" %}
 		{% block content %} {% endblock %}
-  </div>
+        <hr>
+		<footer>
+			<p><a href="https://github.com/mrspartak/phalconPasswordManager" target="_blank">Github project</a>. Made by <a href="http://assorium.ru" target="_blank">Assorium</a></p>
+		</footer>
+	</div>
 </body>
 </html>

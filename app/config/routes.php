@@ -115,6 +115,7 @@ $app->post('/ajax', function() use ($app){
 			
 			if(Users::sha1rounds($app->config->app->static_salt . $data['secret_key'] . $row->salt) == $row->text_secret_key) {
 				$response['text_secret'] = $app->crypt->decryptBase64($row->text_closed, $data['secret_key']);
+				$response['text_secret'] = iconv('cp1251', 'utf-8', $response['text_secret']);
 			} else {
 				{$app->response->setStatusCode(500, "Wrong credentials")->sendHeaders();exit();}
 			}
@@ -127,15 +128,13 @@ $app->post('/ajax', function() use ($app){
 			if($row->user_id != $app->session->get('user_id')) {$app->response->setStatusCode(500, "Data error")->sendHeaders();exit();}
 			
 			if(Users::sha1rounds($app->config->app->static_salt . $data['secret_key'] . $row->salt) == $row->text_secret_key) {
-				$response['text_secret'] = $app->crypt->decryptBase64($row->text_closed, $data['secret_key']);
+				if ($row->delete() == false) {
+					$app->response->setStatusCode(500, "Error while deleting")->sendHeaders();
+				} else {
+					$response['status'] = 'ok';
+				}
 			} else {
 				{$app->response->setStatusCode(500, "Wrong credentials")->sendHeaders();exit();}
-			}
-			
-			if ($row->delete() == false) {
-				$app->response->setStatusCode(500, "Error while deleting")->sendHeaders();
-			} else {
-				$response['status'] = 'ok';
 			}
 		break;
 		
@@ -143,7 +142,9 @@ $app->post('/ajax', function() use ($app){
 		$app->response->setStatusCode(404, "Not Found")->sendHeaders();
 	}
 	
-	echo json_encode($response);
+	$app->response->setContentType('application/json', 'UTF-8')
+		->setContent(json_encode($response))
+		->send();
 });
 
 
