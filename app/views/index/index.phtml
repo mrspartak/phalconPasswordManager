@@ -1,0 +1,66 @@
+{% extends "layouts/main.phtml" -%}
+
+{% block content %}
+
+<h2>
+	{{ link_to('', 'Password box', 'class': 'no-decoration') }}  
+	<div class="btn-group pull-right">
+  	{{ link_to('logout', 'logout', 'class': 'btn btn-default btn-sm') }}
+  </div>
+</h2>
+<div class="content">
+  {% for row in data %}
+  <div class="row row{{ row.id }} padding-bottom-14">
+  	<div class="col-xs-6">
+    	<div class="well well-vsm">{{ row.text_open }}</div>
+    </div>
+    <div class="col-xs-6">
+    	<div class="hidden textarea">
+      	<textarea class="form-control vertical-resize margin-bottom-6" rows="3" disabled></textarea>
+        <div class="btn-group">
+        	<button type="button" class="btn btn-default btn-sm" onclick="App.page.hideData({{ row.id }})">Hide</button>
+        </div>
+      </div>
+      <div class="input-group secret_inputs">
+        <input type="password" placeholder="Input secret to show" autocomplete="off" name="text_secret_key" required class="form-control secret_key" onkeydown="if (event.keyCode == 13) App.data.get.getSecretData({{ row.id }})">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button" onclick="App.data.get.getSecretData({{ row.id }})">Show</button>
+          <button type="button" class="btn btn-danger" onclick="App.data.send.deleteRow({{ row.id }})">Delete</button>
+        </span>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<hr>
+<h2>Add new row</h2>
+<div class="add_content">
+{{ form('addData', 'method': 'post') }}
+  <div class="row">
+    <div class="col-xs-6">
+    	<h4>Open information</h4>
+      <textarea class="form-control vertical-resize" name="text_open" required rows="3"></textarea>
+    </div>
+    <div class="col-xs-6">
+    	<div class="form-group">
+        <h4>Secret information</h4>
+        <textarea class="form-control vertical-resize" name="text_closed" required rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <h4>Password to access secret info</h4>
+        <input type="password" autocomplete="off" name="text_secret_key" required class="form-control">
+      </div>
+      <input type="hidden" name="token" value="{{ token }}"/>
+      <div class="form-group">
+        <input class="btn btn-default" type="submit" value="Submit">
+      </div>
+   	</div>
+  </div>
+</form>
+</div>
+
+<script>
+App.vr.user.token = '{{ token }}'
+App.init();
+</script>
+{% endblock %}

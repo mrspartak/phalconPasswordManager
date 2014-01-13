@@ -1,0 +1,30 @@
+{% set cases = [
+	'empty_fields': [
+  	'class': 'danger',
+    'text': 'Empty feaild. Please fill all the inputs'
+  ], 
+  'token_error': [
+  	'class': 'danger',
+    'text': 'Not valid data given'
+  ], 
+  'data_add_success': [
+  	'class': 'success',
+    'text': 'Data succesfully added!'
+  ], 
+  'error_recaptcha': [
+  	'class': 'danger',
+    'text': 'Wrong captcha text'
+  ], 
+  'error_wrong_credentials': [
+  	'class': 'danger',
+    'text': 'Wrong credentials given'
+  ]] 
+%}
+{% if message %}
+  <div class="alert alert-{{ cases[message]['class'] }} alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{ cases[message]['text'] }}
+  </div>
+{% endif %}
+
+<div class="alert hidden error-block alert-warning"></div>

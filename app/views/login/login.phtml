@@ -1,0 +1,19 @@
+{% extends "layouts/main.phtml" -%}
+
+{% block content %}
+
+{{ form('login', 'method': 'post', 'class': 'form-signin') }}
+  <input type="text" name="user_nick" class="form-control" placeholder="Email or nick" required autofocus>
+  <input type="password" name="user_password" class="form-control" placeholder="Password" required>
+  <script type="text/javascript">
+	 var RecaptchaOptions = {theme : 'white'};
+	 </script>
+  <div class="recaptcha">{{ recaptcha_get_html() }}</div>
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in or Sign up</button>
+  
+  <h3 class="text-center">or look for OpenId sign up</h3>
+  <script src="//ulogin.ru/js/ulogin.js"></script>
+  <div id="uLogin" data-ulogin="display=panel;fields=first_name,last_name;providers=vkontakte,facebook,twitter,odnoklassniki,google,yandex,mailru;hidden=livejournal,openid,lastfm,linkedin,liveid,soundcloud,steam,flickr,vimeo,youtube,webmoney,foursquare,tumblr,googleplus;redirect_uri={{ url('login') }}"></div>
+</form>
+
+{% endblock %}
