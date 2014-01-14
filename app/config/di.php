@@ -59,7 +59,7 @@ $di->setShared('modelsMetadata', function() use ($config) {
 		$metaData = new Phalcon\Mvc\Model\MetaData\Apc(
 			array(
 				"lifetime" => 3600,
-				"suffix"   => $config->app->suffix . "-meta-db-main"
+				"prefix"   => $config->app->suffix . "-meta-db-main"
 			)
 		);
 	} else {
