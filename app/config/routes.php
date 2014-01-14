@@ -17,23 +17,21 @@ $app->get('/login', function () use ($app) {
 $app->post('/login', function () use ($app) {	
 	$user_nick = $app->request->getPost("user_nick");
 	$user_password = $app->request->getPost("user_password");
-	
 	$token = $app->request->getPost("token");
 	
-	if($token) {
+	if($token)
+	{
 		$s = file_get_contents('http://ulogin.ru/token.php?token=' . $token . '&host=' . $_SERVER['HTTP_HOST']);
 		$user = json_decode($s, true);
-		
-		$nick = Users::sha1rounds($app->config->app->static_salt . $user['identity']);
-		$pass = Users::sha1rounds($app->config->app->static_salt . $user['identity'] . $user['network']);
+		$nick = Users::sha1Rounds($app->config->app->static_salt . $user['identity']);
+		$pass = Users::sha1Rounds($app->config->app->static_salt . $user['identity'] . $user['network']);
 	} elseif($user_nick && $user_password) {
-		
 		$resp = recaptcha_check_answer (RECAPTCHA_PRIVATE,  $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
-		if (!$resp->is_valid) {
+		if (!$resp->is_valid)
+		{
 			return $app->response->redirect("login?message=error_recaptcha")->sendHeaders();
 		}
-		
-		$nick = Users::sha1rounds($app->config->app->static_salt . $user_nick);
+		$nick = Users::sha1Rounds($app->config->app->static_salt . $user_nick);
 		$pass = $user_password;
 	} else {
 		return $app->response->redirect("error/500")->sendHeaders();
@@ -44,26 +42,26 @@ $app->post('/login', function () use ($app) {
 		"bind"       => array(1 => $nick)
 	));
 	
-	if($user->id == null) {
+	if($user->id == null)
+	{
 		$user = new Users();
-		$salt = Users::generate_salt();
+		$salt = Users::generateSalt();
 		$data = array(
 			'user_nick' => $nick,
-			'user_password' => Users::sha1rounds($app->config->app->static_salt . $pass . $salt),
+			'user_password' => Users::sha1Rounds($app->config->app->static_salt . $pass . $salt),
 			'password_salt' => $salt,
 			'openid' => ($token) ? 1 : 0
 		);
 		$user->save($data);
 		$user->login($user);
 	} else {
-		if(Users::sha1rounds($app->config->app->static_salt . $pass . $user->password_salt) == $user->user_password) {
+		if(Users::sha1Rounds($app->config->app->static_salt . $pass . $user->password_salt) == $user->user_password)
+		{
 			$user->login($user);
 		} else {
 			return $app->response->redirect("login?message=error_wrong_credentials")->sendHeaders();
 		}
-
 	}
-	 
 })->setName('login');
 
 
@@ -86,14 +84,13 @@ $app->post('/addData', function () use ($app) {
 	$data['user_id'] = $app->session->get('user_id');
 	$data['text_open'] = $text_open;
 	$data['text_closed'] = $app->crypt->encryptBase64($text_closed, $text_secret_key);
-	$data['salt'] = Users::generate_salt();
-	$data['text_secret_key'] = Users::sha1rounds($app->config->app->static_salt . $text_secret_key . $data['salt']);
+	$data['salt'] = Users::generateSalt();
+	$data['text_secret_key'] = Users::sha1Rounds($app->config->app->static_salt . $text_secret_key . $data['salt']);
 	
 	$d = new Data();
 	$d->save($data);
 	
 	$app->response->redirect("?message=data_add_success")->sendHeaders();
-	
 });
 
 
@@ -105,7 +102,8 @@ $app->post('/ajax', function() use ($app){
 	$data = $app->request->getPost('data');
 	$filter = new \Phalcon\Filter();
 	
-	switch($action) {
+	switch($action) 
+	{
 		case 'get_secret':
 			if(!$data['id']) {$app->response->setStatusCode(500, "No data given")->sendHeaders();exit();}
 			
@@ -113,7 +111,7 @@ $app->post('/ajax', function() use ($app){
 			if($row == null) {$app->response->setStatusCode(500, "Data error")->sendHeaders();exit();}
 			if($row->user_id != $app->session->get('user_id')) {$app->response->setStatusCode(500, "Data error 1")->sendHeaders();exit();}
 			
-			if(Users::sha1rounds($app->config->app->static_salt . $data['secret_key'] . $row->salt) == $row->text_secret_key) {
+			if(Users::sha1Rounds($app->config->app->static_salt . $data['secret_key'] . $row->salt) == $row->text_secret_key) {
 				$response['text_secret'] = $app->crypt->decryptBase64($row->text_closed, $data['secret_key']);
 				$response['text_secret'] = iconv('cp1251', 'utf-8', $response['text_secret']);
 			} else {
@@ -127,7 +125,7 @@ $app->post('/ajax', function() use ($app){
 			if($row == null) {$app->response->setStatusCode(500, "Data error")->sendHeaders();exit();}
 			if($row->user_id != $app->session->get('user_id')) {$app->response->setStatusCode(500, "Data error")->sendHeaders();exit();}
 			
-			if(Users::sha1rounds($app->config->app->static_salt . $data['secret_key'] . $row->salt) == $row->text_secret_key) {
+			if(Users::sha1Rounds($app->config->app->static_salt . $data['secret_key'] . $row->salt) == $row->text_secret_key) {
 				if ($row->delete() == false) {
 					$app->response->setStatusCode(500, "Error while deleting")->sendHeaders();
 				} else {

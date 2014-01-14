@@ -8,9 +8,4 @@ class Data extends \Phalcon\Mvc\Model
 	{
 		$this->skipAttributes(array('id', 'creation_date'));
   }
-	
-	public function getByCharacters() 
-	{
-		
-	}
 }

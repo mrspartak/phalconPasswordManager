@@ -1,11 +1,11 @@
 <?
-define('ROOTDIR', realpath( dirname(__FILE__) . '/../' ) );
+define('ROOTDIR', realpath( dirname(__FILE__) . '/../' ));
 
 $config = new \Phalcon\Config\Adapter\Ini(ROOTDIR . '/app/config/config.ini');
 
-define('STATIC_SALT', 'LJKejke8(lef' );
-define('RECAPTCHA_PUBLIC', $config->captcha->pub );
-define('RECAPTCHA_PRIVATE', $config->captcha->priv );
+define('STATIC_SALT', 'LJKejke8(lef');
+define('RECAPTCHA_PUBLIC', $config->captcha->pub);
+define('RECAPTCHA_PRIVATE', $config->captcha->priv);
 
 $loader = new \Phalcon\Loader();
 $loader->registerDirs(
@@ -27,7 +27,8 @@ $app->url->setBaseUri($app->config->app->base_uri);
 $app->before(function() use ($app) {
 	$route = $app->router->getMatchedRoute()->getName();
 	$not_restricted = array('login', 'error');
-	if($app->session->has("logged_in") !== true && !in_array($route, $not_restricted)) {
+	if($app->session->has("logged_in") !== true && !in_array($route, $not_restricted)) 
+	{
 		return $app->response->redirect("login")->sendHeaders();
 	} elseif ($route == 'login' && $app->session->has("logged_in")) {
 		return $app->response->redirect("")->sendHeaders();
@@ -37,15 +38,14 @@ $app->before(function() use ($app) {
 	}
 });
 
-
 require_once( ROOTDIR . '/app/config/routes.php' );
-
 
 try {
 	$app->handle();
 }
 catch(Exception $e) {
-	if($app->config->app->debug == 0) {
+	if($app->config->app->debug == 0) 
+	{
 		$app->response->redirect("error")->sendHeaders();
 	} else {
 		echo get_class($e), ": ", $e->getMessage(), "<br>";

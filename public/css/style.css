@@ -7,6 +7,7 @@
 .no-decoration {text-decoration: none !important;}
 
 .glyphicon, .caret {line-height:inherit;}
+#recaptcha_area, #recaptcha_table, .recaptchatable, #recaptcha_response_field { line-height: normal !important;}
 
 hr {
   border-color: #ccc;

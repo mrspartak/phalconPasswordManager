@@ -1,9 +1,7 @@
 <?
 $di = new \Phalcon\DI\FactoryDefault();
 
-
 $di->setShared('config', function() use ($config){ return $config; });
-
 
 $di->setShared('session', function() use ($config){
 	session_set_cookie_params($config->app->session_lifetime);
@@ -14,15 +12,11 @@ $di->setShared('session', function() use ($config){
 	return $session;
 });
 
-
 $di->set('response', 'Phalcon\Http\Response');
-
 
 $di->set('view', function() use ($config) {
 	$view = new Phalcon\Mvc\View\Simple();
-
 	$view->setViewsDir(ROOTDIR . '/app/views/');
-
 	$view->registerEngines(array(
 		'.phtml' => function($view) use ($config) {
 			$volt = new Phalcon\Mvc\View\Engine\Volt($view);
@@ -35,7 +29,7 @@ $di->set('view', function() use ($config) {
 				)
 			);
 			$compiler = $volt->getCompiler();
-			
+
 			$compiler->addFunction('recaptcha_get_html', function() use ($config) {
 				return "'". recaptcha_get_html($config->captcha->pub, null, true). "'" ;
 			});
@@ -43,10 +37,8 @@ $di->set('view', function() use ($config) {
 			return $volt;
 		}
 	));
-
 	return $view;
 }, true);
-
 
 $di->setShared('db', function() use ($config) {	
 	$db = new \Phalcon\Db\Adapter\Pdo\Mysql(array(
@@ -58,13 +50,12 @@ $di->setShared('db', function() use ($config) {
 		"persistent" => $config->db->persistent
 	));
 	$db->execute('SET NAMES UTF8' , array());
-	
 	return $db;
 });
 
-
 $di->setShared('modelsMetadata', function() use ($config) {
-	if($config->app->cache_apc) {
+	if($config->app->cache_apc) 
+	{
 		$metaData = new Phalcon\Mvc\Model\MetaData\Apc(
 			array(
 				"lifetime" => 3600,
@@ -79,16 +70,13 @@ $di->setShared('modelsMetadata', function() use ($config) {
 	return $metaData;
 });
 
-
 $di->setShared('modelsManager', function(){
 	return new Phalcon\Mvc\Model\Manager();
 });
 
-
 $di->set('crypt', function(){
 	return new Phalcon\Crypt();
 });
-
 
 $di->set('security', function(){
 	$security = new Phalcon\Security();

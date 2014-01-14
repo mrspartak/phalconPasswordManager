@@ -6,6 +6,25 @@ var App = {
 		$.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
 			options.data = options.data + '&token='+ App.vr.user.token;
 		});
+		
+		var showPass=false;
+		$('.password_show_toggle').change(function(){
+				showPass = ($('.password_show_toggle:checked').length>0);
+				if (showPass){
+						$('.password_closed').hide();
+						$('.password_open').show();
+				}else{
+						$('.password_open').hide();
+						$('.password_closed').show();
+				}
+		});
+		
+		$('.password_closed').change(function(){
+				if (!showPass) $('.password_open').val($('.password_closed').val());
+		});
+		$('.password_open').change(function(){
+				if (showPass) $('.password_closed').val($('.password_open').val());
+		});
 	},
 	page : {
 		hideData : function(id) {

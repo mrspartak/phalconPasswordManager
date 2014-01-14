@@ -9,7 +9,7 @@ class Users extends \Phalcon\Mvc\Model
 		$this->skipAttributes(array('id'));
   }
 	
-	static function generate_salt() 
+	static function generateSalt() 
 	{
 		$a = '1234567890!@#$%^&*()_+-=qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM[];,.';
 		$length = strlen($a);
@@ -19,7 +19,7 @@ class Users extends \Phalcon\Mvc\Model
 		return $salt;
 	}
 	
-	static function md5rounds($string)
+	static function md5Rounds($string)
 	{
 		$config = Phalcon\DI::getDefault()->getConfig();
 		
@@ -29,7 +29,7 @@ class Users extends \Phalcon\Mvc\Model
 		return $string;
 	}
 	
-	static function sha1rounds($string)
+	static function sha1Rounds($string)
 	{
 		$config = Phalcon\DI::getDefault()->getConfig();
 		
