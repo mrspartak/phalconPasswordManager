@@ -2,14 +2,14 @@
 
 $di = new \Phalcon\DI\FactoryDefault();
 
-$di->set(
+$di->setShared(
     'config',
     function () use ($config) {
         return $config;
     }
 );
 
-$di->set(
+$di->setShared(
     'session',
     function () use ($config) {
         session_set_cookie_params($config->app->session_lifetime);
@@ -23,7 +23,7 @@ $di->set(
     }
 );
 
-$di->set(
+$di->setShared(
     'view',
     function () use ($config) {
         $view = new Phalcon\Mvc\View\Simple();
@@ -57,7 +57,7 @@ $di->set(
     }
 );
 
-$di->set(
+$di->setShared(
     'db',
     function () use ($config) {
 
@@ -67,7 +67,7 @@ $di->set(
     }
 );
 
-$di->set(
+$di->setShared(
     'modelsMetadata',
     function () use ($config) {
         if ($config->app->cache_apc) {
@@ -84,19 +84,18 @@ $di->set(
     }
 );
 
-$di->set(
+$di->setShared(
     'crypt',
     function () {
         return new Phalcon\Crypt();
     }
 );
 
-$di->set(
+$di->setShared(
     'security',
     function () {
         $security = new Phalcon\Security();
         $security->setWorkFactor(12);
         return $security;
-    },
-    true
+    }
 );

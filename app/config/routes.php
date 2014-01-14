@@ -218,7 +218,11 @@ $app->post(
                 $app->response->setStatusCode(404, "Not Found")->sendHeaders();
         }
 
-        $app->response->setContentType('application/json', 'UTF-8')->setContent(json_encode($response))->send();
+        $app
+            ->response
+            ->setContentType('application/json', 'UTF-8')
+            ->setJsonContent($response, JSON_NUMERIC_CHECK|JSON_UNESCAPED_UNICODE)
+            ->send();
     }
 );
 

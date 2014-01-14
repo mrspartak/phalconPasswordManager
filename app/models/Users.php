@@ -30,18 +30,20 @@ class Users extends \Phalcon\Mvc\Model
         $this->skipAttributes(array('id'));
     }
 
-    static function generateSalt()
+    /**
+     * @return mixed
+     */
+    public static function generateSalt()
     {
-        $a      = '1234567890!@#$%^&*()_+-=qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM[];,.';
-        $length = strlen($a);
-        $salt   = '';
-        for ($i = 0; $i < 40; $i++) {
-            $salt .= $a[rand(0, $length)];
-        }
-        return $salt;
+        return Phalcon\DI::getDefault()->getSecurity()->getSaltBytes();
     }
 
-    static function md5Rounds($string)
+    /**
+     * @param $string
+     *
+     * @return string
+     */
+    public static function md5Rounds($string)
     {
         $config = Phalcon\DI::getDefault()->getConfig();
 
@@ -52,8 +54,14 @@ class Users extends \Phalcon\Mvc\Model
         return $string;
     }
 
-    static function sha1Rounds($string)
+    /**
+     * @param $string
+     *
+     * @return string
+     */
+    public static function sha1Rounds($string)
     {
+
         $config = Phalcon\DI::getDefault()->getConfig();
 
         for ($i = 0; $i < $config->app->hash_rounds; $i++) {
@@ -63,6 +71,9 @@ class Users extends \Phalcon\Mvc\Model
         return $string;
     }
 
+    /**
+     * @param $user
+     */
     public function login($user)
     {
         $session = $this->getDI()->getSession();
@@ -73,6 +84,6 @@ class Users extends \Phalcon\Mvc\Model
         $security->getToken();
 
         $response = $this->getDI()->getResponse();
-        $response->redirect("")->sendHeaders();
+        $response->redirect()->sendHeaders();
     }
 }
