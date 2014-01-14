@@ -68,7 +68,7 @@ $app->post('/login', function () use ($app) {
 $app->get('/logout', function () use ($app) {
 	$app->session->destroy();
 	$app->response->redirect("login")->sendHeaders();
-})->setName('login');
+});
 
 
 $app->post('/addData', function () use ($app) {
