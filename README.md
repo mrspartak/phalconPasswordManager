@@ -22,7 +22,7 @@ DB. All the Database settings
 - persistent
 
 Captcha parameters. Get your keys on http://www.google.com/recaptcha
-- stat: static key
+- pub: public key
 - priv: private key
 
 Application settings
