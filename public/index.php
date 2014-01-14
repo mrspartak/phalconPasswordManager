@@ -29,12 +29,15 @@ $app->before(function() use ($app) {
 	$not_restricted = array('login', 'error');
 	if($app->session->has("logged_in") !== true && !in_array($route, $not_restricted)) 
 	{
-		return $app->response->redirect("login")->sendHeaders();
+		$app->response->redirect("login")->sendHeaders();
+		return false;
 	} elseif ($route == 'login' && $app->session->has("logged_in")) {
-		return $app->response->redirect("")->sendHeaders();
+		$app->response->redirect("")->sendHeaders();
+		return false;
 	}
 	if($app->request->isSecureRequest() !== true) {
-		return $app->response->redirect( 'htpps://'. $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], true )->sendHeaders();
+		$app->response->redirect( 'htpps://'. $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], true )->sendHeaders();
+		return false;
 	}
 });
 
@@ -48,9 +51,13 @@ catch(Exception $e) {
 	{
 		$app->response->redirect("error")->sendHeaders();
 	} else {
-		echo get_class($e), ": ", $e->getMessage(), "<br>";
-		echo " File=", $e->getFile(), "<br>";
-		echo " Line=", $e->getLine(), "<br>";
-		echo $e->getTraceAsString();
+		$s = get_class($e) .": ". $e->getMessage() ."<br>"
+			." File=". $e->getFile() ."<br>"
+			." Line=". $e->getLine() ."<br>"
+			.$e->getTraceAsString();
+
+		$app->response
+		->setContent($s)
+		->send();
 	}
 }
