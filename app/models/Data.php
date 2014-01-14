@@ -2,10 +2,17 @@
 
 class Data extends \Phalcon\Mvc\Model
 {
-	protected $_source = 'data';
 
-	public function initialize()
-	{
-		$this->skipAttributes(array('id', 'creation_date'));
-  }
+    /**
+     * @return \Phalcon\Mvc\Model|string
+     */
+    public function setSource()
+    {
+        return 'data';
+    }
+
+    public function initialize()
+    {
+        $this->skipAttributes(array('id', 'creation_date'));
+    }
 }
