@@ -16,7 +16,7 @@ Copy this git project. Insert database structure from db folder. Edit **config_d
 DB. All the Database settings
 - host: host path
 - dbname: database name
-- user: user name
+- username: user name
 - password: password
 - charset
 - persistent
