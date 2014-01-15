@@ -60,7 +60,6 @@ $di->setShared(
 $di->setShared(
     'db',
     function () use ($config) {
-
         $db = new \Phalcon\Db\Adapter\Pdo\Mysql($config->db->toArray());
         $db->execute('SET NAMES UTF8', array());
         return $db;

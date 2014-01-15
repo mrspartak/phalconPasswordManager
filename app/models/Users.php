@@ -31,11 +31,17 @@ class Users extends \Phalcon\Mvc\Model
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public static function generateSalt()
     {
-        return Phalcon\DI::getDefault()->getSecurity()->getSaltBytes();
+        $slave = '1234567890!@#$%^&*()_+-=qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM[];,.';
+        $length = strlen($slave);
+        $salt = '';
+        for ($i = 0; $i < 40; $i++) {
+            $salt .= $slave[rand(0, $length)];
+        }
+        return $salt;
     }
 
     /**

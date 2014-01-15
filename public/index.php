@@ -27,15 +27,17 @@ $app->before(
     function () use ($app) {
         $route = $app->router->getMatchedRoute()->getName();
         $not_restricted = array('login', 'error');
-        if ($app->session->has("logged_in") !== true && !in_array($route, $not_restricted)) {
+        if ($app->session->has("logged_in") !== true && !in_array($route, $not_restricted))
+				{
             $app->response->redirect("login")->sendHeaders();
             return false;
         } elseif ($route == 'login' && $app->session->has("logged_in")) {
             $app->response->redirect()->sendHeaders();
             return false;
         }
-        if ( $app->config->app->debug!=1 && $app->request->isSecureRequest() !== true) {
-            $app->response->redirect($app->config->app->base_uri, true)->sendHeaders();
+        if($app->request->isSecureRequest() !== true)
+				{
+            $app->response->redirect( 'htpps://'. $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], true )->sendHeaders();
             return false;
         }
     }

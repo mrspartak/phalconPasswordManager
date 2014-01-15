@@ -3,7 +3,7 @@ $app->get(
     '/',
         function () use ($app) {
             $message = $app->request->get('message');
-            $data    = Data::find('user_id = ' . $app->session->get('user_id'));
+            $data    = Data::findByUserId($app->session->get('user_id'));
 
             echo $app['view']->render(
                              'index/index',
@@ -108,7 +108,7 @@ $app->post(
     function () use ($app) {
         if ($app->security->checkToken('token') === false) {
             $app->response->redirect("?message=token_error")->sendHeaders();
-            exit();
+            return false;
         }
 
         $text_open       = $app->request->getPost('text_open');
@@ -117,7 +117,7 @@ $app->post(
 
         if (!$text_open || !$text_closed || !$text_secret_key) {
             $app->response->redirect("?message=empty_fields")->sendHeaders();
-            exit();
+            return false;
         }
 
         $data['user_id']         = $app->session->get('user_id');
@@ -141,11 +141,11 @@ $app->post(
     function () use ($app) {
         if (!$app->request->isAjax()) {
             $app->response->setStatusCode(404, "Not Found")->sendHeaders();
-            exit();
+            return false;
         }
         if ($app->security->checkToken('token') === false) {
             $app->response->setStatusCode(501, "Token error")->sendHeaders();
-            exit();
+            return false;
         }
 
         $action = $app->request->getPost('action');
@@ -156,17 +156,17 @@ $app->post(
             case 'get_secret':
                 if (!$data['id']) {
                     $app->response->setStatusCode(500, "No data given")->sendHeaders();
-                    exit();
+                    return false;
                 }
 
                 $row = Data::findFirst((int)$data['id']);
                 if ($row == null) {
                     $app->response->setStatusCode(500, "Data error")->sendHeaders();
-                    exit();
+                    return false;
                 }
                 if ($row->user_id != $app->session->get('user_id')) {
                     $app->response->setStatusCode(500, "Data error 1")->sendHeaders();
-                    exit();
+                    return false;
                 }
 
                 if (Users::sha1Rounds($app->config->app->static_salt . $data['secret_key'] . $row->salt)
@@ -199,8 +199,7 @@ $app->post(
                 }
 
                 if (Users::sha1Rounds($app->config->app->static_salt . $data['secret_key'] . $row->salt)
-                    == $row->text_secret_key
-                ) {
+                    == $row->text_secret_key ) {
                     if ($row->delete() == false) {
                         $app->response->setStatusCode(500, "Error while deleting")->sendHeaders();
                     } else {
