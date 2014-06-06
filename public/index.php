@@ -37,7 +37,7 @@ $app->before(
         }
         if($app->request->isSecureRequest() !== true)
 				{
-            $app->response->redirect( 'htpps://'. $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], true )->sendHeaders();
+            $app->response->redirect('https://'. $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], true )->sendHeaders();
             return false;
         }
     }
